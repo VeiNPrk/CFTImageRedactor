@@ -3,6 +3,7 @@ package com.example.imageredactorcft;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
     Context context;
     class ResultViewHolder extends RecyclerView.ViewHolder {
 
+        ConstraintLayout rootView;
         ImageView imvResult;
         //TextView tvHistoryLang;
 
@@ -27,6 +29,7 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
 
         void initViews(View itemView) {
             imvResult = itemView.findViewById(R.id.imv_rv_result);
+            rootView=itemView.findViewById(R.id.root_view);
             //tvHistoryLang = (TextView)itemView.findViewById(R.id.tv_history_lang);
         }
     }
@@ -54,6 +57,11 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int i) {
         Bitmap bitmap = PictureUtils.getScaledBitmap(data.get(i).getPath(),(Activity) context);
+        if(i % 2 != 0)
+        {
+            //holder.rootView.setBackgroundColor(Color.BLACK);
+            holder.rootView.setBackgroundResource(R.color.colorBackItem);
+        }
         holder.imvResult.setImageBitmap(bitmap);
         /*holder.tvHistoryLang.setText(data.get(i).getLang());*/
     }
