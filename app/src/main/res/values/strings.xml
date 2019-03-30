@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ImageRedactorCFT</string>
+    <string name="chose_load_dlg_tittle">Выберите источник</string>
+    <string name="btn_rotate">Повернуть на 90</string>
+    <string name="btn_gray">Чёрно-белый</string>
+    <string name="btn_mirror">Отразить зеркально</string>
+    <string name="rv_img_content_descr">Обработанное изображение</string>
+</resources>
