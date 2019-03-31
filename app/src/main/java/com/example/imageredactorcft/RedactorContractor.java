@@ -1,13 +1,19 @@
 package com.example.imageredactorcft;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+
+import java.util.List;
 
 public interface RedactorContractor {
     interface View {
 		void updatePhotoView(Bitmap bitmap);
 		void startActivityToResults(Intent intent, int requestCode);
+		void updateRvData(List<PictureClass> data);
+		void showError(String error);
+		void viewDialog();
 		/*void onPickImageClick();
 		void onRotateImageClick();
 		void onMirrorImageClick();
@@ -29,7 +35,8 @@ public interface RedactorContractor {
 		void onListItemSourceClick();
 		void onLoadFromCameraClick();
 		void onLoadFromGalleryClick();
-		void onActivityResultFinish(int requestCode);
+		void onActivityResultFinish(int requestCode, Intent data);
+		void isBitmapNullError();
 		void onDestroy();
 		/*void onLoadFinished(Bundle bundle);
         void onDestroy();

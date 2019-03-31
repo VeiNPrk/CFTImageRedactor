@@ -1,6 +1,7 @@
 package com.example.imageredactorcft;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -25,13 +26,22 @@ public class FileUtils {
         }
     }
 
-    public Bitmap getBitmapFromFile(){
-        return null;
+    public static Bitmap getBitmapFromFile(File file, Activity activity){
+        Bitmap bitmap = null;
+        if(file==null || !file.exists()){
+            bitmap = null;
+        }
+        else{
+            bitmap = PictureUtils.getScaledBitmap(file.getPath(), activity);
+            //imvRedactor.setImageBitmap(bitmap);
+        }
+        return bitmap;
     }
 
     public static String getFileName(){
         return INITIAL_FILE_NAME;
     }
+
     public static String getFileName(String nameFile){
         String name="CFT_"+nameFile+".jpg";
         return name;

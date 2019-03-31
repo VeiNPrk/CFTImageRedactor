@@ -5,4 +5,5 @@
     <string name="btn_gray">Чёрно-белый</string>
     <string name="btn_mirror">Отразить зеркально</string>
     <string name="rv_img_content_descr">Обработанное изображение</string>
+    <string name="bitmap_null_error">Произошла ошибка при открытии файла! Файл не найден!</string>
 </resources>
