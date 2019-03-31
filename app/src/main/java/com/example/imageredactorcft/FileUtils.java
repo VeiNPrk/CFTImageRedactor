@@ -12,12 +12,14 @@ import android.provider.MediaStore;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class FileUtils {
 
     public static final String INITIAL_FILE_NAME="CFT_1.jpg";
+    public static final String STR_FILE_PROVIDER="";
 
-    public void saveBitmapToFile(Bitmap bitmap, String fileName){
+    public static void saveBitmapToFile(Bitmap bitmap, String fileName){
         try (FileOutputStream out = new FileOutputStream(fileName)) {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored

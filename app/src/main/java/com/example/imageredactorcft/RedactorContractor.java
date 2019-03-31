@@ -31,13 +31,14 @@ public interface RedactorContractor {
 		void onMirrorImageClick();
 		void onGrayImageClick();
 		void onListItemClick();
-		void onListItemRemoveClick();
-		void onListItemSourceClick();
+		void onListItemRemoveClick(PictureClass picture);
+		void onListItemSourceClick(PictureClass picture);
 		void onLoadFromCameraClick();
 		void onLoadFromGalleryClick();
 		void onActivityResultFinish(int requestCode, Intent data);
 		void isBitmapNullError();
 		void onDestroy();
+		void onInitViews();
 		/*void onLoadFinished(Bundle bundle);
         void onDestroy();
         void dialogShowDone();*/

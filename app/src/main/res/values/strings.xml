@@ -6,4 +6,6 @@
     <string name="btn_mirror">Отразить зеркально</string>
     <string name="rv_img_content_descr">Обработанное изображение</string>
     <string name="bitmap_null_error">Произошла ошибка при открытии файла! Файл не найден!</string>
+    <string name="pop_menu_sourсe">Сделать источником</string>
+    <string name="pop_menu_delete">Удалить</string>
 </resources>

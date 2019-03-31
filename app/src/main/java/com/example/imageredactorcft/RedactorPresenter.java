@@ -12,6 +12,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerViewAccessibilityDelegate;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 public class RedactorPresenter implements RedactorContractor.Presenter {
@@ -20,6 +21,7 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
     private static final int REQUEST_GALLERY = 2;
 
     RedactorContractor.View view;
+    DBClass db;
     Activity activity;
     Context context;
     File photoFile = null;
@@ -28,6 +30,7 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
         view=_view;
         activity = (Activity) _view;
         context = _context;
+        db = new DBClass();
     }
 
     @Override
@@ -35,19 +38,69 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
         view.viewDialog();
     }
 
+    private void/*String*/ saveNewImg(Bitmap bitmap){
+        String newPath="";
+        long newDateTime = new Date().getTime();
+        try {
+            String fileName = String.valueOf(newDateTime);
+            String newFileName = FileUtils.getFileName(fileName);
+            newPath = FileUtils.getPhotoFile(context, newFileName).getPath();
+            FileUtils.saveBitmapToFile(bitmap, newPath);
+            PictureClass newPicture = new PictureClass(newPath, newDateTime);
+            db.savePicture(newPicture);
+        }
+        catch (Exception ex){
+            view.showError(ex.getMessage());
+        }
+        //return newPath;
+    }
+
     @Override
     public void onRotateImageClick() {
-
+        Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
+        Bitmap rotateBitmap = null;
+        try{
+            rotateBitmap=PictureUtils.getRotateBitmap(bitmap);
+            if(rotateBitmap!=null) {
+                saveNewImg(rotateBitmap);
+                view.updateRvData(db.getData());
+            }
+        }
+        catch (Exception ex) {
+            view.showError(ex.getMessage());
+        }
     }
 
     @Override
     public void onMirrorImageClick() {
-
+        Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
+        Bitmap mirrorBitmap = null;
+        try{
+            mirrorBitmap=PictureUtils.getMirrorHorizonBitmap(bitmap);
+            if(mirrorBitmap!=null) {
+                saveNewImg(mirrorBitmap);
+                view.updateRvData(db.getData());
+            }
+        }
+        catch (Exception ex) {
+            view.showError(ex.getMessage());
+        }
     }
 
     @Override
     public void onGrayImageClick() {
-
+        Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
+        Bitmap grayBitmap = null;
+        try{
+            grayBitmap=PictureUtils.getGrayBitmap(bitmap);
+            if(grayBitmap!=null) {
+                saveNewImg(grayBitmap);
+                view.updateRvData(db.getData());
+            }
+        }
+        catch (Exception ex) {
+            view.showError(ex.getMessage());
+        }
     }
 
     @Override
@@ -56,13 +109,13 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
     }
 
     @Override
-    public void onListItemRemoveClick() {
-
+    public void onListItemRemoveClick(PictureClass picture) {
+        view.showError("Remove "+picture.getDateTime());
     }
 
     @Override
-    public void onListItemSourceClick() {
-
+    public void onListItemSourceClick(PictureClass picture) {
+        view.showError("Source "+picture.getDateTime());
     }
 
     @Override
@@ -139,5 +192,10 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
     @Override
     public void onDestroy() {
 
+    }
+
+    @Override
+    public void onInitViews() {
+        view.updateRvData(db.getData());
     }
 }

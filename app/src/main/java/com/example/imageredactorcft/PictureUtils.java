@@ -48,7 +48,7 @@ public class PictureUtils {
 		return getScaledBitmap(path, size.x, size.y);
 	}
 
-	private Bitmap getRotateBitmap(Bitmap inpBitmap){
+	public static Bitmap getRotateBitmap(Bitmap inpBitmap){
 		Bitmap bOutput;
 		float degrees = 90;//rotation degree
 		Matrix matrix = new Matrix();
@@ -57,7 +57,7 @@ public class PictureUtils {
 		return bOutput;
 	}
 
-	private Bitmap getMirrorHorizonBitmap(Bitmap inpBitmap){
+	public static Bitmap getMirrorHorizonBitmap(Bitmap inpBitmap){
 		Bitmap bOutput;
 		Matrix matrix = new Matrix();
 		matrix.preScale(-1.0f, 1.0f);
@@ -65,7 +65,7 @@ public class PictureUtils {
 		return bOutput;
 	}
 
-	private Bitmap getGrayBitmap(Bitmap inpBitmap){
+	public static Bitmap getGrayBitmap(Bitmap inpBitmap){
 
         //Custom color matrix to convert to GrayScale
         float[] matrix = new float[]{
@@ -83,7 +83,7 @@ public class PictureUtils {
         Paint paint = new Paint();
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
         paint.setColorFilter(filter);
-        canvas.drawBitmap(dest, 0, 0, paint);
+        canvas.drawBitmap(inpBitmap, 0, 0, paint);
 
         return dest;
     }

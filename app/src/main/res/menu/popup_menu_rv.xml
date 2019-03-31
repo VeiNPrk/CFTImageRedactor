@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/pop_menu_item_source"
+        android:title="@string/pop_menu_sourсe"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/pop_menu_item_delete"
+        android:title="@string/pop_menu_delete"
+        app:showAsAction="always" />
+</menu>

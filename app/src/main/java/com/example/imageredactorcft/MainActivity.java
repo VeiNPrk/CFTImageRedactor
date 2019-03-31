@@ -5,15 +5,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -25,12 +20,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements RedactorContractor.View, ChoseLoadDialog.ChoseLoadDialogListener{
+public class MainActivity extends AppCompatActivity implements RedactorContractor.View, ResultRecyclerAdapter.ResultPopMenuClickListener,
+		ChoseLoadDialog.ChoseLoadDialogListener{
 
 
 	public static final int REQUEST_PERMISSION=111;
@@ -53,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
         presenter = new RedactorPresenter(this, getApplicationContext());
         initViews();
 		results = new ArrayList<PictureClass>();
-		initTestData();
+
 		setRecyclerView();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -63,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 			//dialog.dismiss();
 			return;
 		}
+		presenter.onInitViews();
 	}
 
 	private void initViews(){
@@ -78,19 +73,31 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 				presenter.onPickImageClick();
 			}
 		});
-	}
 
-	private void initTestData(){
-    	String filePath = FileUtils.getPhotoFile(this,FileUtils.getFileName()).getPath();
-    	PictureClass cl1 = new PictureClass(filePath);
-    	results.add(cl1);
-    	results.add(cl1);
+		btnRotate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				presenter.onRotateImageClick();
+			}
+		});
+		btnGray.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				presenter.onGrayImageClick();
+			}
+		});
+		btnMirror.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				presenter.onMirrorImageClick();
+			}
+		});
 	}
 
 	private void setRecyclerView() {
 		LinearLayoutManager layoutManager =
 				new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-		adapter = new ResultRecyclerAdapter(this, results);
+		adapter = new ResultRecyclerAdapter(this, this, results);
 		rvResults.setLayoutManager(layoutManager);
 		rvResults.setHasFixedSize(true);
 		rvResults.setAdapter(adapter);
@@ -146,7 +153,8 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 
 	@Override
 	public void updateRvData(List<PictureClass> data) {
-
+		results = data;
+		adapter.setData(results);
 	}
 
 	@Override
@@ -158,5 +166,15 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 	public void viewDialog() {
 		ChoseLoadDialog dialog = ChoseLoadDialog.newInstance();
 		dialog.show(getSupportFragmentManager(), ChoseLoadDialog.TAG);
+	}
+
+	@Override
+	public void onSourceClick(PictureClass picture) {
+		presenter.onListItemSourceClick(picture);
+	}
+
+	@Override
+	public void onDeleteClick(PictureClass picture) {
+		presenter.onListItemRemoveClick(picture);
 	}
 }
