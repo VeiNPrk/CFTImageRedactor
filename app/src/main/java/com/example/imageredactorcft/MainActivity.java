@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 			//dialog.dismiss();
 			return;
 		}
-		presenter.onInitViews();
+		presenter.onInitViews(savedInstanceState);
 	}
 
 	private void initViews(){
@@ -127,6 +127,17 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 		}
 		presenter.onActivityResultFinish(requestCode, data);
 	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+    	outState=presenter.onSaveState(outState);
+		super.onSaveInstanceState(outState);
+	}
+
+	/*@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+	}*/
 
 	@Override
 	public void onGalleryClicked() {

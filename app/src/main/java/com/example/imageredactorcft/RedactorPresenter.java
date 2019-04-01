@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerViewAccessibilityDelegate;
@@ -19,6 +20,7 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
 
     private static final int REQUEST_PHOTO = 1;
     private static final int REQUEST_GALLERY = 2;
+    public static final String FILE_NAME_STATE_KEY="file_name_state_key";
 
     RedactorContractor.View view;
     DBClass db;
@@ -110,12 +112,31 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
 
     @Override
     public void onListItemRemoveClick(PictureClass picture) {
-        view.showError("Remove "+picture.getDateTime());
+		try{
+			if(db.delete(picture.getDateTime())>0) {
+                if (FileUtils.deleteFile(picture.getPath()))
+                    view.updateRvData(db.getData());
+                else {
+                    picture.save();
+                    view.showError(context.getString(R.string.delete_file_error));
+                }
+            }
+            else
+                view.showError(context.getString(R.string.delete_file_error));
+		}
+		catch(Exception ex){
+			view.showError(ex.getMessage());
+		}
+        //view.showError("Remove "+picture.getDateTime());
     }
 
     @Override
     public void onListItemSourceClick(PictureClass picture) {
-        view.showError("Source "+picture.getDateTime());
+		String path = picture.getPath();
+		photoFile = new File(path);
+        Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
+        view.updatePhotoView(bitmap);
+        //view.showError("Source "+picture.getDateTime());
     }
 
     @Override
@@ -195,7 +216,21 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
     }
 
     @Override
-    public void onInitViews() {
+    public void onInitViews(Bundle savedState) {
         view.updateRvData(db.getData());
+        if(savedState!=null)
+        {
+            String path = savedState.getString(FILE_NAME_STATE_KEY);
+            photoFile = new File(path);
+            Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
+            view.updatePhotoView(bitmap);
+        }
     }
+
+    @Override
+    public Bundle onSaveState(Bundle bundle) {
+        bundle.putString(FILE_NAME_STATE_KEY, photoFile.getPath());
+        return bundle;
+    }
+
 }

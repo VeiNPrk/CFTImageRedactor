@@ -8,4 +8,5 @@
     <string name="bitmap_null_error">Произошла ошибка при открытии файла! Файл не найден!</string>
     <string name="pop_menu_sourсe">Сделать источником</string>
     <string name="pop_menu_delete">Удалить</string>
+    <string name="delete_file_error">Не удалось удалить файл</string>
 </resources>

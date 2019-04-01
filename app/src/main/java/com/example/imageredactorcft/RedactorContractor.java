@@ -4,6 +4,7 @@ package com.example.imageredactorcft;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 
 import java.util.List;
 
@@ -38,7 +39,9 @@ public interface RedactorContractor {
 		void onActivityResultFinish(int requestCode, Intent data);
 		void isBitmapNullError();
 		void onDestroy();
-		void onInitViews();
+		void onInitViews(Bundle savedState);
+		Bundle onSaveState(Bundle bundle);
+		//void onRestoreState();
 		/*void onLoadFinished(Bundle bundle);
         void onDestroy();
         void dialogShowDone();*/

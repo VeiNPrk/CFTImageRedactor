@@ -24,7 +24,7 @@ public class PictureClass extends BaseModel {
 
     public void setPath(String _path) {
         path=_path;
-        dateTime = new Date().getTime();
+        //dateTime = new Date().getTime();
     }
 
     public String getPath() {
@@ -35,8 +35,8 @@ public class PictureClass extends BaseModel {
         return dateTime;
     }
 
-    public void setDateTime(long dateTime){
-        dateTime = dateTime;
+    public void setDateTime(long _dateTime){
+        dateTime = _dateTime;
     }
 
 }

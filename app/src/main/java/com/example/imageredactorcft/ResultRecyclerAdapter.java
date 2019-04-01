@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,25 +55,48 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.rv_item_maket, parent, false);
         final ResultViewHolder viewHolder = new ResultViewHolder(view);
+		/*int position = viewHolder.getAdapterPosition();
+		if(position % 2 != 0)
+        {
+            viewHolder.rootView.setBackgroundResource(R.color.colorBackItem);
+        }*/
+		view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                int adapterPosition = viewHolder.getAdapterPosition();
+				if (adapterPosition != RecyclerView.NO_POSITION) {
+
+					final PictureClass picture = data.get(adapterPosition);
+					createPopupMenu(view, picture);
+				}
+                return false;
+            }
+        });
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int i) {
-        final PictureClass picture = data.get(i);
+        //final PictureClass picture = data.get(i);
         Bitmap bitmap = PictureUtils.getScaledBitmap(data.get(i).getPath(),(Activity) context);
-        if(i % 2 != 0)
+        int position = holder.getAdapterPosition();
+        if(position!=i)
+            Log.d("123",position+"-"+i);
+        if(position % 2 != 0)
         {
             holder.rootView.setBackgroundResource(R.color.colorBackItem);
         }
+        else
+            holder.rootView.setBackgroundResource(R.color.colorBackItemWhite);
+
         holder.imvResult.setImageBitmap(bitmap);
-        holder.rootView.setOnLongClickListener(new View.OnLongClickListener() {
+        /*holder.rootView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 createPopupMenu(v, picture);
                 return false;
             }
-        });
+        });*/
     }
 
     @Override

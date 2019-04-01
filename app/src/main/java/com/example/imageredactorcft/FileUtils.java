@@ -53,6 +53,20 @@ public class FileUtils {
         File filesDir = context.getFilesDir();
         return new File(filesDir,nameFile);
     }
+	
+	public static boolean deleteFile(String path){
+		File fdelete = new File(path);
+		if (fdelete.exists())
+			return fdelete.delete();
+		else
+			return false;
+			/*if (fdelete.delete()) {
+				System.out.println("file Deleted :" + uri.getPath());
+			} else {
+				System.out.println("file not Deleted :" + uri.getPath());
+			}*/
+
+	}
 
     @SuppressLint("NewApi")
     public static String getRealPathFromURI_API19(Context context, Uri uri){
