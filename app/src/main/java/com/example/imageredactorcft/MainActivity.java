@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 
 
 	public static final int REQUEST_PERMISSION=111;
-
+	public final String TAG = getClass().getSimpleName();
     Button btnRotate;
     Button btnGray;
     Button btnMirror;
@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
         presenter = new RedactorPresenter(this, getApplicationContext());
         initViews();
 		results = new ArrayList<PictureClass>();
-
 		setRecyclerView();
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -134,11 +133,6 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 		super.onSaveInstanceState(outState);
 	}
 
-	/*@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-	}*/
-
 	@Override
 	public void onGalleryClicked() {
 		presenter.onLoadFromGalleryClick();
@@ -153,8 +147,10 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 	public void updatePhotoView(Bitmap bitmap) {
 		if(bitmap != null)
 			imvRedactor.setImageBitmap(bitmap);
-		else
-			presenter.isBitmapNullError();
+		else {
+			imvRedactor.setImageDrawable(getApplicationContext().getResources().getDrawable(android.R.drawable.ic_menu_add));
+			//presenter.isBitmapNullError();
+		}
 	}
 
 	@Override
@@ -187,5 +183,11 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 	@Override
 	public void onDeleteClick(PictureClass picture) {
 		presenter.onListItemRemoveClick(picture);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		presenter.onDestroy();
 	}
 }

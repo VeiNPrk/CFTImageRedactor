@@ -11,13 +11,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerViewAccessibilityDelegate;
+import android.util.Log;
 
 import java.io.File;
 import java.util.Date;
 import java.util.List;
 
 public class RedactorPresenter implements RedactorContractor.Presenter {
-
+    public final String TAG = getClass().getSimpleName();
     private static final int REQUEST_PHOTO = 1;
     private static final int REQUEST_GALLERY = 2;
     public static final String FILE_NAME_STATE_KEY="file_name_state_key";
@@ -104,18 +105,23 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
             view.showError(ex.getMessage());
         }
     }
-
+/*
     @Override
     public void onListItemClick() {
 
-    }
+    }*/
 
     @Override
     public void onListItemRemoveClick(PictureClass picture) {
 		try{
 			if(db.delete(picture.getDateTime())>0) {
-                if (FileUtils.deleteFile(picture.getPath()))
+                if (FileUtils.deleteFile(picture.getPath())) {
                     view.updateRvData(db.getData());
+                    if (picture.getPath().equals(photoFile.getPath())) {
+                        view.updatePhotoView(null);
+                        photoFile=null;
+                    }
+                }
                 else {
                     picture.save();
                     view.showError(context.getString(R.string.delete_file_error));
@@ -143,7 +149,7 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
     public void onLoadFromCameraClick() {
         photoFile=FileUtils.getPhotoFile(context, FileUtils.getFileName());
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri uri = FileProvider.getUriForFile(context, "com.example.imageredactorcft.fileprovider", photoFile);
+        Uri uri = FileProvider.getUriForFile(context, FileUtils.STR_FILE_PROVIDER, photoFile);
         captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         List<ResolveInfo> cameraActivities = context
                 .getPackageManager().queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY);
@@ -178,7 +184,7 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
     @Override
     public void onActivityResultFinish(int requestCode, Intent data) {
         if(requestCode==REQUEST_PHOTO){
-            Uri uri = FileProvider.getUriForFile(context, "com.example.imageredactorcft.fileprovider", photoFile);
+            Uri uri = FileProvider.getUriForFile(context, FileUtils.STR_FILE_PROVIDER, photoFile);
             context.revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
             view.updatePhotoView(bitmap);
@@ -204,15 +210,15 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
             view.updatePhotoView(bitmap);
         }
     }
-
+/*
     @Override
     public void isBitmapNullError() {
         view.showError(context.getString(R.string.bitmap_null_error));
-    }
+    }*/
 
     @Override
     public void onDestroy() {
-
+        view=null;
     }
 
     @Override
@@ -220,16 +226,20 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
         view.updateRvData(db.getData());
         if(savedState!=null)
         {
+
             String path = savedState.getString(FILE_NAME_STATE_KEY);
-            photoFile = new File(path);
-            Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
-            view.updatePhotoView(bitmap);
+            if(path!=null && path!=""){
+                photoFile = new File(path);
+                Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
+                view.updatePhotoView(bitmap);
+            }
         }
     }
 
     @Override
     public Bundle onSaveState(Bundle bundle) {
-        bundle.putString(FILE_NAME_STATE_KEY, photoFile.getPath());
+        if(photoFile!=null)
+            bundle.putString(FILE_NAME_STATE_KEY, photoFile.getPath());
         return bundle;
     }
 

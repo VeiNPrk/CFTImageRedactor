@@ -17,7 +17,7 @@ import java.nio.file.Path;
 public class FileUtils {
 
     public static final String INITIAL_FILE_NAME="CFT_1.jpg";
-    public static final String STR_FILE_PROVIDER="";
+    public static final String STR_FILE_PROVIDER="com.example.imageredactorcft.fileprovider";
 
     public static void saveBitmapToFile(Bitmap bitmap, String fileName){
         try (FileOutputStream out = new FileOutputStream(fileName)) {
