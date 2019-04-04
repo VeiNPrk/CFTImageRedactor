@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
     Button btnRotate;
     Button btnGray;
     Button btnMirror;
+    Button btnExif;
     ImageView imvRedactor;
     RecyclerView rvResults;
     Context context;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 		btnGray = findViewById(R.id.btn_to_gray);
 		btnRotate = findViewById(R.id.btn_rotate);
 		btnMirror = findViewById(R.id.btn_mirror);
+		btnExif = findViewById(R.id.btn_exif);
 		imvRedactor.setImageDrawable(getApplicationContext().getResources().getDrawable(android.R.drawable.ic_menu_add));
 		imvRedactor.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -89,6 +92,12 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 			@Override
 			public void onClick(View v) {
 				presenter.onMirrorImageClick();
+			}
+		});
+		btnExif.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				presenter.onExifClick();
 			}
 		});
 	}

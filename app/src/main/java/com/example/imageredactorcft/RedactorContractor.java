@@ -31,7 +31,7 @@ public interface RedactorContractor {
 		void onRotateImageClick();
 		void onMirrorImageClick();
 		void onGrayImageClick();
-		//void onListItemClick();
+		void onExifClick();
 		void onListItemRemoveClick(PictureClass picture);
 		void onListItemSourceClick(PictureClass picture);
 		void onLoadFromCameraClick();

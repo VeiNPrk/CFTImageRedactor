@@ -5,13 +5,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 
 public class FileUtils {
@@ -67,6 +70,29 @@ public class FileUtils {
 			}*/
 
 	}
+
+    public static void setExif(String newFilePath, ExifInterface oldExif, String newDateTime, String newDeviceName) {
+        try {
+            ExifInterface newExif = new ExifInterface(newFilePath);
+            final Class<ExifInterface> cls = ExifInterface.class;
+            final Field[] fields = cls.getFields();
+            for (Field field : fields) {
+                final String fieldName = field.getName();
+                if (!TextUtils.isEmpty(fieldName) && fieldName.startsWith("TAG")) {
+                    final String tag = field.get(cls).toString();
+                    final String value = oldExif.getAttribute(tag);
+                    if (value != null) {
+                        newExif.setAttribute(tag, value);
+                    }
+                }
+            }
+			newExif.setAttribute(ExifInterface.TAG_DATETIME, newDateTime);
+			newExif.setAttribute(ExifInterface.TAG_MODEL, newDeviceName);
+            newExif.saveAttributes();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @SuppressLint("NewApi")
     public static String getRealPathFromURI_API19(Context context, Uri uri){

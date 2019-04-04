@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="chose_load_dlg_items">
-        <item>Галлерея</item>
+        <item>Галерея</item>
         <item>Камера</item>
     </array>
     

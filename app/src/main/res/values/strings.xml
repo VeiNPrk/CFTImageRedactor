@@ -9,4 +9,13 @@
     <string name="pop_menu_sourсe">Сделать источником</string>
     <string name="pop_menu_delete">Удалить</string>
     <string name="delete_file_error">Не удалось удалить файл</string>
+    <string name="tv_text_exifstorage">Путь:</string>
+    <string name="tv_text_exifmimetype">Типы MIME:</string>
+    <string name="tv_text_exifresolution">Разрешение:</string>
+    <string name="tv_text_exifcamera">Камера:</string>
+    <string name="tv_text_exifiso">ISO:</string>
+    <string name="tv_text_exifdate">Дата:</string>
+    <string name="tv_text_exifpower">Светосила:</string>
+    <string name="tv_text_exifsize">Размер:</string>
+    <string name="exif_no_data">Нет данных</string>
 </resources>
