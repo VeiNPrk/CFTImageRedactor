@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.List;
@@ -23,7 +24,8 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
 
     class ResultViewHolder extends RecyclerView.ViewHolder {
 
-        ConstraintLayout rootView;
+        //ConstraintLayout rootView;
+        RelativeLayout rootView;
         ImageView imvResult;
 
         ResultViewHolder(View itemView) {

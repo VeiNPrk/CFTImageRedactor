@@ -53,6 +53,8 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
 			intent.putExtra(ExifPresenter.EXIF_PATH_KEY, photoFile.getPath());
 			view.startActivityToResults(intent, REQUEST_EXIF);
         }
+        else
+            view.showError(context.getString(R.string.error_no_source));
     }
 
     private void/*String*/ saveNewImg(Bitmap bitmap){
@@ -82,51 +84,60 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
 
     @Override
     public void onRotateImageClick() {
-        Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
+        if(photoFile!=null) {
+            Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
 
-        Bitmap rotateBitmap = null;
-        try{
-            rotateBitmap=PictureUtils.getRotateBitmap(bitmap);
-            if(rotateBitmap!=null) {
-                saveNewImg(rotateBitmap);
-                view.updateRvData(db.getData());
+            Bitmap rotateBitmap = null;
+            try {
+                rotateBitmap = PictureUtils.getRotateBitmap(bitmap);
+                if (rotateBitmap != null) {
+                    saveNewImg(rotateBitmap);
+                    view.updateRvData(db.getData());
+                }
+            } catch (Exception ex) {
+                view.showError(ex.getMessage());
             }
         }
-        catch (Exception ex) {
-            view.showError(ex.getMessage());
-        }
+        else
+            view.showError(context.getString(R.string.error_no_source));
     }
 
     @Override
     public void onMirrorImageClick() {
-        Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
-        Bitmap mirrorBitmap = null;
-        try{
-            mirrorBitmap=PictureUtils.getMirrorHorizonBitmap(bitmap);
-            if(mirrorBitmap!=null) {
-                saveNewImg(mirrorBitmap);
-                view.updateRvData(db.getData());
+        if(photoFile!=null) {
+            Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
+            Bitmap mirrorBitmap = null;
+            try {
+                mirrorBitmap = PictureUtils.getMirrorHorizonBitmap(bitmap);
+                if (mirrorBitmap != null) {
+                    saveNewImg(mirrorBitmap);
+                    view.updateRvData(db.getData());
+                }
+            } catch (Exception ex) {
+                view.showError(ex.getMessage());
             }
         }
-        catch (Exception ex) {
-            view.showError(ex.getMessage());
-        }
+        else
+            view.showError(context.getString(R.string.error_no_source));
     }
 
     @Override
     public void onGrayImageClick() {
-        Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
-        Bitmap grayBitmap = null;
-        try{
-            grayBitmap=PictureUtils.getGrayBitmap(bitmap);
-            if(grayBitmap!=null) {
-                saveNewImg(grayBitmap);
-                view.updateRvData(db.getData());
+        if(photoFile!=null) {
+            Bitmap bitmap = FileUtils.getBitmapFromFile(photoFile, activity);
+            Bitmap grayBitmap = null;
+            try {
+                grayBitmap = PictureUtils.getGrayBitmap(bitmap);
+                if (grayBitmap != null) {
+                    saveNewImg(grayBitmap);
+                    view.updateRvData(db.getData());
+                }
+            } catch (Exception ex) {
+                view.showError(ex.getMessage());
             }
         }
-        catch (Exception ex) {
-            view.showError(ex.getMessage());
-        }
+        else
+            view.showError(context.getString(R.string.error_no_source));
     }
 /*
     @Override

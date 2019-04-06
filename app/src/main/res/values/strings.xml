@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">ImageRedactorCFT</string>
     <string name="chose_load_dlg_tittle">Выберите источник</string>
-    <string name="btn_rotate">Повернуть на 90</string>
+    <string name="btn_rotate">Повернуть</string>
     <string name="btn_gray">Чёрно-белый</string>
-    <string name="btn_mirror">Отразить зеркально</string>
+    <string name="btn_mirror">Отразить</string>
+    <string name="btn_exif">EXIF</string>
     <string name="rv_img_content_descr">Обработанное изображение</string>
     <string name="bitmap_null_error">Произошла ошибка при открытии файла! Файл не найден!</string>
     <string name="pop_menu_sourсe">Сделать источником</string>
@@ -18,4 +19,5 @@
     <string name="tv_text_exifpower">Светосила:</string>
     <string name="tv_text_exifsize">Размер:</string>
     <string name="exif_no_data">Нет данных</string>
+    <string name="error_no_source">Не выбран источник для обработки!</string>
 </resources>
