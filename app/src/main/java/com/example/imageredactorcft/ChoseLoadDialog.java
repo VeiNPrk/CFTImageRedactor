@@ -34,7 +34,7 @@ public class ChoseLoadDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //LayoutInflater inflater = getActivity().getLayoutInflater();
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.chose_load_dlg_tittle)
+                .setTitle(R.string.dlg_chose_load_tittle)
                 .setItems(R.array.chose_load_dlg_items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
@@ -43,6 +43,9 @@ public class ChoseLoadDialog extends DialogFragment {
                                 break;
                             case 1:
                                 mListener.onCameraClicked();
+                                break;
+                            case 2:
+                                mListener.onUrlClicked();
                                 break;
                         }
                         Log.d("dlg","element"+which);
@@ -57,6 +60,7 @@ public class ChoseLoadDialog extends DialogFragment {
     public interface ChoseLoadDialogListener {
         public void onGalleryClicked();
         public void onCameraClicked();
+        public void onUrlClicked();
     }
 
     /*public void onDismiss(DialogInterface dialog) {

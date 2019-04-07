@@ -15,15 +15,12 @@ public interface RedactorContractor {
 		void updateRvData(List<PictureClass> data);
 		void showError(String error);
 		void viewDialog();
-		/*void onPickImageClick();
-		void onRotateImageClick();
-		void onMirrorImageClick();
-		void onGrayImageClick();*/
-        /*void isShowDialog(String lang);
-        void isShowErrorDialog(String error);
-		String getIdentText();
-		void clearTvIdentText();
-		void initIdentifyer(String text);*/
+		void showUrlDialog();
+		void showProgressBar();
+		void hideProgressBar();
+		void updateProgress(int progress);
+		void initDownloadLoader(Bundle bundle);
+		void restartDownloadLoader();
     }
 
     interface Presenter {
@@ -36,14 +33,13 @@ public interface RedactorContractor {
 		void onListItemSourceClick(PictureClass picture);
 		void onLoadFromCameraClick();
 		void onLoadFromGalleryClick();
+		void onDlgDownloadYesClick(String url);
+		void onLoadFromUrlClick();
+		void onLoadFinished(String data);
 		void onActivityResultFinish(int requestCode, Intent data);
-		//void isBitmapNullError();
 		void onDestroy();
+		void onMessageEvent(int progress);
 		void onInitViews(Bundle savedState);
 		Bundle onSaveState(Bundle bundle);
-		//void onRestoreState();
-		/*void onLoadFinished(Bundle bundle);
-        void onDestroy();
-        void dialogShowDone();*/
     }
 }

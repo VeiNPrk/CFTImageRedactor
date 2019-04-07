@@ -2,11 +2,13 @@ package com.example.imageredactorcft;
 
 import android.Manifest;
 import android.app.Activity;
+//import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.ExifInterface;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -20,12 +22,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RedactorContractor.View, ResultRecyclerAdapter.ResultPopMenuClickListener,
-		ChoseLoadDialog.ChoseLoadDialogListener{
+		ChoseLoadDialog.ChoseLoadDialogListener, DownloadUrlDialog.DownloadDialogListener, LoaderManager.LoaderCallbacks<String> {
 
 
 	public static final int REQUEST_PERMISSION=111;
@@ -36,11 +46,14 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
     Button btnExif;
     ImageView imvRedactor;
     RecyclerView rvResults;
+    LinearLayout pbDownloadImage;
+    TextView tvProgressDownload;
     Context context;
     //File photoFile;
 	List<PictureClass> results;
 	ResultRecyclerAdapter adapter;
 	RedactorContractor.Presenter presenter;
+	boolean loaderIsStart=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 			//dialog.dismiss();
 			return;
 		}
+		//getSupportLoaderManager();
 		presenter.onInitViews(savedInstanceState);
 	}
 
@@ -68,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 		btnRotate = findViewById(R.id.btn_rotate);
 		btnMirror = findViewById(R.id.btn_mirror);
 		btnExif = findViewById(R.id.btn_exif);
+		tvProgressDownload = findViewById(R.id.tv_progress);
+		pbDownloadImage = findViewById(R.id.pb_download_image);
 		imvRedactor.setImageDrawable(getApplicationContext().getResources().getDrawable(android.R.drawable.ic_menu_add));
 		imvRedactor.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -100,7 +116,27 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 				presenter.onExifClick();
 			}
 		});
+		//getLoaderManager();
 	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		EventBus.getDefault().register(this);
+	}
+
+	@Override
+	protected void onStop() {
+		EventBus.getDefault().unregister(this);
+		super.onStop();
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	public void onMessageEvent(MessageEvent event) {
+		if(event!=null){
+			presenter.onMessageEvent(event.progress);
+		}
+    }
 
 	private void setRecyclerView() {
 		LinearLayoutManager layoutManager =
@@ -153,6 +189,12 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 	}
 
 	@Override
+	public void onUrlClicked() {
+    	presenter.onLoadFromUrlClick();
+		//testurl();
+	}
+
+	@Override
 	public void updatePhotoView(Bitmap bitmap) {
 		if(bitmap != null)
 			imvRedactor.setImageBitmap(bitmap);
@@ -185,6 +227,39 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 	}
 
 	@Override
+	public void showUrlDialog() {
+		DownloadUrlDialog dialog = DownloadUrlDialog.newInstance();
+		dialog.show(getSupportFragmentManager(), DownloadUrlDialog.TAG);
+	}
+
+	@Override
+	public void showProgressBar() {
+		imvRedactor.setVisibility(View.GONE);
+		pbDownloadImage.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void hideProgressBar() {
+		imvRedactor.setVisibility(View.VISIBLE);
+		pbDownloadImage.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void updateProgress(int progress) {
+		tvProgressDownload.setText(progress+"%");
+	}
+
+	@Override
+	public void initDownloadLoader(Bundle bundle) {
+		getSupportLoaderManager().initLoader(UrlFileLoader.DOWNLOAD_LOADER_ID, bundle, this);
+	}
+
+	@Override
+	public void restartDownloadLoader() {
+		getSupportLoaderManager().initLoader(UrlFileLoader.DOWNLOAD_LOADER_ID, null, this);
+	}
+
+	@Override
 	public void onSourceClick(PictureClass picture) {
 		presenter.onListItemSourceClick(picture);
 	}
@@ -198,5 +273,36 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 	protected void onDestroy() {
 		super.onDestroy();
 		presenter.onDestroy();
+	}
+
+
+	@Override
+	public Loader<String> onCreateLoader(int id, Bundle args) {
+		loaderIsStart=true;
+		Log.d(TAG, "onCreateLoader");
+        return new UrlFileLoader(this, args);
+
+	}
+
+	@Override
+	public void onLoadFinished(Loader<String> loader, String data) {
+		int id = loader.getId();
+		presenter.onLoadFinished(data);
+		getSupportLoaderManager().destroyLoader(id);
+		loaderIsStart=false;
+		Log.d(TAG, "onLoadFinished");
+	}
+
+	@Override
+	public void onLoaderReset(Loader<String> loader) {
+		Log.d(TAG, "onLoaderReset");
+	}
+
+	@Override
+	public void onYesDownloadClicked(String data) {
+		//String url = "https://gear.blizzard.com/media/catalog/product/o/w/ow-mercy-gold-video_1.jpg";
+		//String url = "https://www.pngkey.com/png/detail/224-2245923_mercy-overwatch-png-vector-mercy-transparent-overwatch-artwork.png";
+
+		presenter.onDlgDownloadYesClick(data);
 	}
 }

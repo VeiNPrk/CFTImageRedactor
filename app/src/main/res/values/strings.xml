@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">ImageRedactorCFT</string>
-    <string name="chose_load_dlg_tittle">Выберите источник</string>
+    <string name="dlg_chose_load_tittle">Выберите источник</string>
     <string name="btn_rotate">Повернуть</string>
     <string name="btn_gray">Чёрно-белый</string>
     <string name="btn_mirror">Отразить</string>
@@ -20,4 +20,10 @@
     <string name="tv_text_exifsize">Размер:</string>
     <string name="exif_no_data">Нет данных</string>
     <string name="error_no_source">Не выбран источник для обработки!</string>
+    <string name="error_no_url">Введите URL-адрес изображения!</string>
+    <string name="error_download_url">Не удалось загрузить изображение!</string>
+    <string name="dlg_download_title">Введите адрес изображения</string>
+    <string name="dlg_download_yes">Загрузить</string>
+    <string name="dlg_download_no">Отмена</string>
+
 </resources>

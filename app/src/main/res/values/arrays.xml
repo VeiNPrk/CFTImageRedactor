@@ -3,6 +3,7 @@
     <array name="chose_load_dlg_items">
         <item>Галерея</item>
         <item>Камера</item>
+        <item>Загрузить изображение из сети</item>
     </array>
     
 </resources>
