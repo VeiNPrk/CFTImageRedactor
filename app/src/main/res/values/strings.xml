@@ -22,8 +22,9 @@
     <string name="error_no_source">Не выбран источник для обработки!</string>
     <string name="error_no_url">Введите URL-адрес изображения!</string>
     <string name="error_download_url">Не удалось загрузить изображение!</string>
+    <string name="error_permission_external">Для доступа к галереи необходимо разрешение!</string>
     <string name="dlg_download_title">Введите адрес изображения</string>
     <string name="dlg_download_yes">Загрузить</string>
     <string name="dlg_download_no">Отмена</string>
-
+    <string name="intent_load_gallery">Select Picture</string>
 </resources>

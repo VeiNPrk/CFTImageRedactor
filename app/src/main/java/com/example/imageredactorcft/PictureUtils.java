@@ -1,7 +1,6 @@
 package com.example.imageredactorcft;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -9,13 +8,6 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-
-import java.io.File;
 
 public class PictureUtils {
 
@@ -51,7 +43,7 @@ public class PictureUtils {
 
 	public static Bitmap getRotateBitmap(Bitmap inpBitmap){
 		Bitmap bOutput;
-		float degrees = 90;//rotation degree
+		float degrees = 90;
 		Matrix matrix = new Matrix();
 		matrix.setRotate(degrees);
 		bOutput = Bitmap.createBitmap(inpBitmap, 0, 0, inpBitmap.getWidth(), inpBitmap.getHeight(), matrix, true);
@@ -68,7 +60,6 @@ public class PictureUtils {
 
 	public static Bitmap getGrayBitmap(Bitmap inpBitmap){
 
-        //Custom color matrix to convert to GrayScale
         float[] matrix = new float[]{
                 0.3f, 0.59f, 0.11f, 0, 0,
                 0.3f, 0.59f, 0.11f, 0, 0,
@@ -85,7 +76,6 @@ public class PictureUtils {
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
         paint.setColorFilter(filter);
         canvas.drawBitmap(inpBitmap, 0, 0, paint);
-
         return dest;
     }
 }

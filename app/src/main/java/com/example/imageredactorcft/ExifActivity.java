@@ -1,34 +1,13 @@
 package com.example.imageredactorcft;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.media.ExifInterface;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ExifActivity extends AppCompatActivity implements ExifContractor.View {
 
-	public final String TAG = getClass().getSimpleName();
     TextView tvExifResolution;
     TextView tvExifCamera;
     TextView tvExifISO;
@@ -73,5 +52,11 @@ public class ExifActivity extends AppCompatActivity implements ExifContractor.Vi
 		tvExifISO.setText(presenter.getExifISO());
 		tvExifDate.setText(presenter.getExifDate());
 		tvExifFPower.setText(presenter.getExifFPower());
+	}
+
+	@Override
+	protected void onDestroy() {
+    	presenter.onDestroy();
+		super.onDestroy();
 	}
 }

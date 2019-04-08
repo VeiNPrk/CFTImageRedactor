@@ -1,16 +1,12 @@
 package com.example.imageredactorcft;
 
 import android.util.Log;
-
-import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-
 import java.util.List;
 
 public class DBClass  implements Repository{
-    public final String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
     public DBClass(){
-
     }
 
     @Override
@@ -20,19 +16,10 @@ public class DBClass  implements Repository{
 
 	@Override
     public long delete(long dateTime) {
-		//item.delete();
         long countDelete;
         countDelete = SQLite.delete().from(PictureClass.class).where(PictureClass_Table.dateTime.eq(dateTime)).executeUpdateDelete();
         return countDelete;
     }
-	
-    @Override
-    public long deleteAll() {
-        long countDelete;
-        countDelete = SQLite.delete().from(PictureClass.class).executeUpdateDelete();
-        return countDelete;
-    }
-
 
     @Override
     public List<PictureClass> getData() {

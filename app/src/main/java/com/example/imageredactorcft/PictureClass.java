@@ -4,7 +4,6 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
-import java.util.Date;
 
 @Table(database = AppDataBase.class)
 public class PictureClass extends BaseModel {
@@ -24,7 +23,6 @@ public class PictureClass extends BaseModel {
 
     public void setPath(String _path) {
         path=_path;
-        //dateTime = new Date().getTime();
     }
 
     public String getPath() {

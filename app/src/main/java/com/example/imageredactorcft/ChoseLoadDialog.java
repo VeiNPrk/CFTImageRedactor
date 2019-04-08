@@ -8,31 +8,26 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 public class ChoseLoadDialog extends DialogFragment {
-    public static final String TAG = "TextDialogFragment";
-    final String LOG_TAG = "myLogs";
-    static String mMessageToDisplay="";
+    public static final String TAG = "ChoseLoadDialog";
     static ChoseLoadDialogListener mListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         try {
             mListener = (ChoseLoadDialogListener) getActivity();
         } catch (ClassCastException e) {
-            throw new ClassCastException("Calling Fragment must implement OnAddFriendListener");
+            throw new ClassCastException("Calling Fragment must implement ChoseLoadDialogListener");
         }
     }
 
-    public static ChoseLoadDialog newInstance(/*String message*/) {
+    public static ChoseLoadDialog newInstance() {
 
         ChoseLoadDialog textDialog = new ChoseLoadDialog();
-        //mMessageToDisplay = message;
         return textDialog;
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        //LayoutInflater inflater = getActivity().getLayoutInflater();
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.dlg_chose_load_tittle)
                 .setItems(R.array.chose_load_dlg_items, new DialogInterface.OnClickListener() {
@@ -48,9 +43,7 @@ public class ChoseLoadDialog extends DialogFragment {
                                 mListener.onUrlClicked();
                                 break;
                         }
-                        Log.d("dlg","element"+which);
-                        // The 'which' argument contains the index position
-                        // of the selected item
+                        Log.d(TAG,"element "+which);
                     }
                 });
 
@@ -63,14 +56,8 @@ public class ChoseLoadDialog extends DialogFragment {
         public void onUrlClicked();
     }
 
-    /*public void onDismiss(DialogInterface dialog) {
-        mListener.onYesClicked();
-        super.onDismiss(dialog);
-        Log.d(LOG_TAG, "TextDialog : onDismiss");
-    }*/
-
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        Log.d(LOG_TAG, "TextDialog : onCancel");
+        Log.d(TAG, "TextDialog : onCancel");
     }
 }

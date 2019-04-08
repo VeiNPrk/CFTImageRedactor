@@ -11,22 +11,19 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.file.Path;
 
 public class FileUtils {
 
-    public static final String INITIAL_FILE_NAME="CFT_1.jpg";
+    private static final String INITIAL_FILE_NAME="CFT_1.jpg";
     public static final String STR_FILE_PROVIDER="com.example.imageredactorcft.fileprovider";
 
     public static void saveBitmapToFile(Bitmap bitmap, String fileName){
         try (FileOutputStream out = new FileOutputStream(fileName)) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,7 +36,6 @@ public class FileUtils {
         }
         else{
             bitmap = PictureUtils.getScaledBitmap(file.getPath(), activity);
-            //imvRedactor.setImageBitmap(bitmap);
         }
         return bitmap;
     }
@@ -64,12 +60,6 @@ public class FileUtils {
 			return fdelete.delete();
 		else
 			return false;
-			/*if (fdelete.delete()) {
-				System.out.println("file Deleted :" + uri.getPath());
-			} else {
-				System.out.println("file not Deleted :" + uri.getPath());
-			}*/
-
 	}
 
     public static void setExif(String newFilePath, ExifInterface oldExif, String newDateTime, String newDeviceName) {
@@ -99,33 +89,17 @@ public class FileUtils {
     public static String getRealPathFromURI_API19(Context context, Uri uri){
         String filePath = "";
         String wholeID = DocumentsContract.getDocumentId(uri);
-
-        // Split at colon, use second item in the array
         String id = wholeID.split(":")[1];
-
         String[] column = { MediaStore.Images.Media.DATA };
-
-        // where id is equal to
         String sel = MediaStore.Images.Media._ID + "=?";
-
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 column, sel, new String[]{ id }, null);
 
         int columnIndex = cursor.getColumnIndex(column[0]);
-
         if (cursor.moveToFirst()) {
             filePath = cursor.getString(columnIndex);
         }
         cursor.close();
         return filePath;
-    }
-
-    public static String getMimeType(String url) {
-        String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        }
-        return type;
     }
 }

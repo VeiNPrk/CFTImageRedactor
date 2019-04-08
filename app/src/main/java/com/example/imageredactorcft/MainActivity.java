@@ -2,7 +2,6 @@ package com.example.imageredactorcft;
 
 import android.Manifest;
 import android.app.Activity;
-//import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.LoaderManager;
@@ -23,22 +22,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RedactorContractor.View, ResultRecyclerAdapter.ResultPopMenuClickListener,
 		ChoseLoadDialog.ChoseLoadDialogListener, DownloadUrlDialog.DownloadDialogListener, LoaderManager.LoaderCallbacks<String> {
 
-
 	public static final int REQUEST_PERMISSION=111;
+	public static final int REQUEST_PERMISSION_FROM_GALLERY=112;
 	public final String TAG = getClass().getSimpleName();
     Button btnRotate;
     Button btnGray;
@@ -49,10 +45,10 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
     LinearLayout pbDownloadImage;
     TextView tvProgressDownload;
     Context context;
-    //File photoFile;
 	List<PictureClass> results;
 	ResultRecyclerAdapter adapter;
 	RedactorContractor.Presenter presenter;
+
 	boolean loaderIsStart=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +64,8 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 				&& ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
 					REQUEST_PERMISSION);
-			//dialog.dismiss();
-			return;
+			//return;
 		}
-		//getSupportLoaderManager();
 		presenter.onInitViews(savedInstanceState);
 	}
 
@@ -116,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 				presenter.onExifClick();
 			}
 		});
-		//getLoaderManager();
 	}
 
 	@Override
@@ -155,10 +148,15 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 		switch (requestCode) {
 			case REQUEST_PERMISSION:
 				if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-					//readDataExternal();
 				}
 				break;
-
+			case REQUEST_PERMISSION_FROM_GALLERY:
+				if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+					presenter.onLoadFromGalleryClick();
+				}
+				else
+					showError(getString(R.string.error_permission_external));
+				break;
 			default:
 				break;
 		}
@@ -180,7 +178,13 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 
 	@Override
 	public void onGalleryClicked() {
-		presenter.onLoadFromGalleryClick();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+				&& ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+					REQUEST_PERMISSION_FROM_GALLERY);
+			return;
+		}
+    	presenter.onLoadFromGalleryClick();
 	}
 
 	@Override
@@ -191,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 	@Override
 	public void onUrlClicked() {
     	presenter.onLoadFromUrlClick();
-		//testurl();
 	}
 
 	@Override
@@ -200,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 			imvRedactor.setImageBitmap(bitmap);
 		else {
 			imvRedactor.setImageDrawable(getApplicationContext().getResources().getDrawable(android.R.drawable.ic_menu_add));
-			//presenter.isBitmapNullError();
 		}
 	}
 
@@ -271,10 +273,9 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
 		presenter.onDestroy();
+		super.onDestroy();
 	}
-
 
 	@Override
 	public Loader<String> onCreateLoader(int id, Bundle args) {
@@ -300,9 +301,6 @@ public class MainActivity extends AppCompatActivity implements RedactorContracto
 
 	@Override
 	public void onYesDownloadClicked(String data) {
-		//String url = "https://gear.blizzard.com/media/catalog/product/o/w/ow-mercy-gold-video_1.jpg";
-		//String url = "https://www.pngkey.com/png/detail/224-2245923_mercy-overwatch-png-vector-mercy-transparent-overwatch-artwork.png";
-
 		presenter.onDlgDownloadYesClick(data);
 	}
 }

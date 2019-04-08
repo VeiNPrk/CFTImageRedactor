@@ -1,30 +1,11 @@
 package com.example.imageredactorcft;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
 import android.media.ExifInterface;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.support.v7.widget.RecyclerViewAccessibilityDelegate;
-import android.text.TextUtils;
-import android.util.Log;
-
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class ExifPresenter implements ExifContractor.Presenter {
-    public final String TAG = getClass().getSimpleName();
     public static final String EXIF_PATH_KEY="exif_path_key";
 
     ExifContractor.View view;

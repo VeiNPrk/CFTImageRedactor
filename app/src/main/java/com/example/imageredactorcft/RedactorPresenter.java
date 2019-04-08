@@ -11,22 +11,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v7.widget.RecyclerViewAccessibilityDelegate;
-import android.text.format.DateFormat;
-import android.util.Log;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public class RedactorPresenter implements RedactorContractor.Presenter {
-    public final String TAG = getClass().getSimpleName();
     private static final int REQUEST_PHOTO = 1;
     private static final int REQUEST_GALLERY = 2;
     private static final int REQUEST_EXIF = 3;
@@ -75,8 +65,6 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
             SimpleDateFormat  df = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 			String strDateTime = df.format(newDateTime);
 			String newDeviceName=context.getString(R.string.app_name);
-			//String newDateString = DateFormat.format("EEEE, MMM d, yyyy", mCrime.getDate()).toString();
-
             FileUtils.setExif(newPath, exif, strDateTime, newDeviceName);
             PictureClass newPicture = new PictureClass(newPath, newDateTime);
             db.savePicture(newPicture);
@@ -195,12 +183,11 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        view.startActivityToResults(Intent.createChooser(intent, "Select Picture"), REQUEST_GALLERY);
+        view.startActivityToResults(Intent.createChooser(intent, context.getString(R.string.intent_load_gallery)), REQUEST_GALLERY);
     }
 
     @Override
     public void onDlgDownloadYesClick(String url) {
-        //String url = "https://www.pngkey.com/png/detail/224-2245923_mercy-overwatch-png-vector-mercy-transparent-overwatch-artwork.png";
         if(!url.equals("") && url.length()>0) {
             String path = FileUtils.getPhotoFile(context, FileUtils.getFileName()).getPath();
             Bundle bundle = new Bundle();
@@ -280,9 +267,6 @@ public class RedactorPresenter implements RedactorContractor.Presenter {
             {
                 view.restartDownloadLoader();
                 view.showProgressBar();
-                /*Bundle bundle = new Bundle();
-                bundle.putString(IdentifyerLoader.KEY_IDENT_TEXT, text);
-                getLoaderManager().restartLoader(IdentifyerLoader.IDENT_LOADER_ID, bundle, this);*/
             }
         }
     }

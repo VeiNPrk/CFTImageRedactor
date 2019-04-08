@@ -3,7 +3,6 @@ package com.example.imageredactorcft;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import java.util.List;
 
 public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAdapter.ResultViewHolder>{
@@ -24,7 +21,6 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
 
     class ResultViewHolder extends RecyclerView.ViewHolder {
 
-        //ConstraintLayout rootView;
         RelativeLayout rootView;
         ImageView imvResult;
 
@@ -57,11 +53,6 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.rv_item_maket, parent, false);
         final ResultViewHolder viewHolder = new ResultViewHolder(view);
-		/*int position = viewHolder.getAdapterPosition();
-		if(position % 2 != 0)
-        {
-            viewHolder.rootView.setBackgroundResource(R.color.colorBackItem);
-        }*/
 		view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -79,11 +70,9 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
 
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int i) {
-        //final PictureClass picture = data.get(i);
+
         Bitmap bitmap = PictureUtils.getScaledBitmap(data.get(i).getPath(),(Activity) context);
         int position = holder.getAdapterPosition();
-        if(position!=i)
-            Log.d("123",position+"-"+i);
         if(position % 2 != 0)
         {
             holder.rootView.setBackgroundResource(R.color.colorBackItem);
@@ -92,13 +81,6 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
             holder.rootView.setBackgroundResource(R.color.colorBackItemWhite);
 
         holder.imvResult.setImageBitmap(bitmap);
-        /*holder.rootView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                createPopupMenu(v, picture);
-                return false;
-            }
-        });*/
     }
 
     @Override
@@ -115,12 +97,9 @@ public class ResultRecyclerAdapter extends RecyclerView.Adapter<ResultRecyclerAd
                 switch(item.getItemId()){
                     case R.id.pop_menu_item_source:
                         popMenuClickListener.onSourceClick(_selectedPicture);
-                        //presenter.addPositionToOrder(_selectedDish);
-                        //Toast.makeText(context, context.getString(R.string.tst_add_position),Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.pop_menu_item_delete:
                         popMenuClickListener.onDeleteClick(_selectedPicture);
-                        //ActivityDish.openActivity(context, _selectedDish, fromMenu);
                         return true;
                 }
                 return false;

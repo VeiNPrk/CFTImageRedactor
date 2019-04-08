@@ -10,10 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-/**
- * Created by VNPrk on 22.10.2018.
- */
-
 public class DownloadUrlDialog extends DialogFragment {
     public static final String TAG = "DownloadUrlDialog";
     DownloadDialogListener mListener;
@@ -26,21 +22,19 @@ public class DownloadUrlDialog extends DialogFragment {
         try {
             mListener = (DownloadDialogListener) getActivity();
         } catch (ClassCastException e) {
-            throw new ClassCastException("Calling Fragment must implement OnAddFriendListener");
+            throw new ClassCastException("Calling Fragment must implement DownloadDialogListener");
         }
     }
 
-    public static DownloadUrlDialog newInstance(/*String message*/) {
-
+    public static DownloadUrlDialog newInstance() {
         DownloadUrlDialog downloadDialog = new DownloadUrlDialog();
-        //mMessageToDisplay = message;
         return downloadDialog;
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.maket_download_dialog, null);
-        etUrl = (EditText) view.findViewById(R.id.et_url);
+        etUrl = view.findViewById(R.id.et_url);
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.dlg_download_title))
                 .setView(view)
@@ -52,16 +46,13 @@ public class DownloadUrlDialog extends DialogFragment {
                 })
                 .setNegativeButton(getString(R.string.dlg_download_no), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //mListener.onNoClicked(DescribeDialogFragment.this);
                     }
                 });
-                //.setMessage(getString(R.string.dialog_text_edit));
         return adb.create();
     }
 
     public interface DownloadDialogListener {
         public void onYesDownloadClicked(String data);
-        //public void onNoClicked();
     }
 
     public void onDismiss(DialogInterface dialog) {

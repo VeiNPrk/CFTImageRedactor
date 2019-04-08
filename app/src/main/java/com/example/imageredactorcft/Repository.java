@@ -4,7 +4,6 @@ import java.util.List;
 
 public interface Repository {
     void savePicture(PictureClass item);
-    long deleteAll();
-	long delete(/*PictureClass item*/long dateTime);
+	long delete(long dateTime);
     List<PictureClass> getData();
 }
